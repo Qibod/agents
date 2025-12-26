@@ -77,8 +77,8 @@ class Me:
 
     def __init__(self):
         self.openai = OpenAI()
-        self.name = "Ed Donner"
-        reader = PdfReader("me/linkedin.pdf")
+        self.name = "Vijay Raghavendar"
+        reader = PdfReader("me/Vijay linkedIn.pdf")
         self.linkedin = ""
         for page in reader.pages:
             text = page.extract_text()
@@ -130,5 +130,68 @@ If the user is engaging in discussion, try to steer them towards getting in touc
 
 if __name__ == "__main__":
     me = Me()
-    gr.ChatInterface(me.chat, type="messages").launch()
+    
+    # Custom CSS for better styling
+    custom_css = """
+    .gradio-container {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    .header {
+        text-align: center;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+    .header h1 {
+        margin: 0;
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+    .header p {
+        margin: 0.5rem 0 0 0;
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    """
+    
+    # Create a custom header
+    with gr.Blocks(theme=gr.themes.Soft(), css=custom_css, title="Career Conversations") as demo:
+        gr.HTML("""
+        <div class="header">
+            <h1>💼 Career Conversations</h1>
+            <p>Chat with Vijay Raghavendar - Ask me about my experience, skills, and career journey</p>
+        </div>
+        """)
+        
+        gr.ChatInterface(
+            me.chat,
+            type="messages",
+            title=None,  # We have custom header above
+            description=None,
+            examples=[
+                "Tell me about your background",
+                "What are your key skills?",
+                "What projects have you worked on?",
+                "How can I get in touch with you?"
+            ],
+            theme=gr.themes.Soft(
+                primary_hue="purple",
+                secondary_hue="slate",
+                neutral_hue="slate",
+            ),
+            retry_btn="🔄 Retry",
+            undo_btn="↩️ Undo",
+            clear_btn="🗑️ Clear",
+            submit_btn="💬 Send",
+        )
+        
+        gr.HTML("""
+        <div style="text-align: center; padding: 1rem; color: #666; font-size: 0.9rem;">
+            <p>Powered by AI • Built with Gradio</p>
+        </div>
+        """)
+    
+    demo.launch()
     
